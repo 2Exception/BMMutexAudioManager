@@ -1,0 +1,538 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8265D7391EBB6CC50079D2DD /* BMMutexAudioManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7381EBB6CC50079D2DD /* BMMutexAudioManagerTests.m */; };
+		8265D7441EBB6CC60079D2DD /* BMMutexAudioManagerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7431EBB6CC60079D2DD /* BMMutexAudioManagerUITests.m */; };
+		8265D75D1EBB70210079D2DD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7551EBB70210079D2DD /* AppDelegate.m */; };
+		8265D75E1EBB70210079D2DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8265D7561EBB70210079D2DD /* Assets.xcassets */; };
+		8265D75F1EBB70210079D2DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8265D7571EBB70210079D2DD /* LaunchScreen.storyboard */; };
+		8265D7601EBB70210079D2DD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8265D7591EBB70210079D2DD /* Info.plist */; };
+		8265D7611EBB70210079D2DD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D75A1EBB70210079D2DD /* main.m */; };
+		8265D7621EBB70210079D2DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D75C1EBB70210079D2DD /* ViewController.m */; };
+		8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8265D7351EBB6CC50079D2DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8265D7131EBB6CC50079D2DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8265D71A1EBB6CC50079D2DD;
+			remoteInfo = BMMutexAudioManager;
+		};
+		8265D7401EBB6CC60079D2DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8265D7131EBB6CC50079D2DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8265D71A1EBB6CC50079D2DD;
+			remoteInfo = BMMutexAudioManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8265D71B1EBB6CC50079D2DD /* BMMutexAudioManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMMutexAudioManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8265D7341EBB6CC50079D2DD /* BMMutexAudioManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BMMutexAudioManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8265D7381EBB6CC50079D2DD /* BMMutexAudioManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMMutexAudioManagerTests.m; sourceTree = "<group>"; };
+		8265D73A1EBB6CC50079D2DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8265D73F1EBB6CC60079D2DD /* BMMutexAudioManagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BMMutexAudioManagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8265D7431EBB6CC60079D2DD /* BMMutexAudioManagerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMMutexAudioManagerUITests.m; sourceTree = "<group>"; };
+		8265D7451EBB6CC60079D2DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8265D7541EBB70210079D2DD /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		8265D7551EBB70210079D2DD /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		8265D7561EBB70210079D2DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8265D7581EBB70210079D2DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8265D7591EBB70210079D2DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8265D75A1EBB70210079D2DD /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8265D75B1EBB70210079D2DD /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8265D75C1EBB70210079D2DD /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8265D7631EBB71440079D2DD /* BMMutexAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMutexAudioManager.h; sourceTree = "<group>"; };
+		8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMutexAudioManager.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8265D7181EBB6CC50079D2DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D7311EBB6CC50079D2DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D73C1EBB6CC50079D2DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8265D7121EBB6CC50079D2DD = {
+			isa = PBXGroup;
+			children = (
+				8265D7531EBB70210079D2DD /* BMMutexAudioManagerDemo */,
+				8265D71D1EBB6CC50079D2DD /* BMMutexAudioManager */,
+				8265D7371EBB6CC50079D2DD /* BMMutexAudioManagerTests */,
+				8265D7421EBB6CC60079D2DD /* BMMutexAudioManagerUITests */,
+				8265D71C1EBB6CC50079D2DD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8265D71C1EBB6CC50079D2DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8265D71B1EBB6CC50079D2DD /* BMMutexAudioManager.app */,
+				8265D7341EBB6CC50079D2DD /* BMMutexAudioManagerTests.xctest */,
+				8265D73F1EBB6CC60079D2DD /* BMMutexAudioManagerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8265D71D1EBB6CC50079D2DD /* BMMutexAudioManager */ = {
+			isa = PBXGroup;
+			children = (
+				8265D7631EBB71440079D2DD /* BMMutexAudioManager.h */,
+				8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */,
+			);
+			path = BMMutexAudioManager;
+			sourceTree = "<group>";
+		};
+		8265D7371EBB6CC50079D2DD /* BMMutexAudioManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				8265D7381EBB6CC50079D2DD /* BMMutexAudioManagerTests.m */,
+				8265D73A1EBB6CC50079D2DD /* Info.plist */,
+			);
+			path = BMMutexAudioManagerTests;
+			sourceTree = "<group>";
+		};
+		8265D7421EBB6CC60079D2DD /* BMMutexAudioManagerUITests */ = {
+			isa = PBXGroup;
+			children = (
+				8265D7431EBB6CC60079D2DD /* BMMutexAudioManagerUITests.m */,
+				8265D7451EBB6CC60079D2DD /* Info.plist */,
+			);
+			path = BMMutexAudioManagerUITests;
+			sourceTree = "<group>";
+		};
+		8265D7531EBB70210079D2DD /* BMMutexAudioManagerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				8265D7541EBB70210079D2DD /* AppDelegate.h */,
+				8265D7551EBB70210079D2DD /* AppDelegate.m */,
+				8265D7561EBB70210079D2DD /* Assets.xcassets */,
+				8265D7571EBB70210079D2DD /* LaunchScreen.storyboard */,
+				8265D7591EBB70210079D2DD /* Info.plist */,
+				8265D75A1EBB70210079D2DD /* main.m */,
+				8265D75B1EBB70210079D2DD /* ViewController.h */,
+				8265D75C1EBB70210079D2DD /* ViewController.m */,
+			);
+			path = BMMutexAudioManagerDemo;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8265D71A1EBB6CC50079D2DD /* BMMutexAudioManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8265D7481EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManager" */;
+			buildPhases = (
+				8265D7171EBB6CC50079D2DD /* Sources */,
+				8265D7181EBB6CC50079D2DD /* Frameworks */,
+				8265D7191EBB6CC50079D2DD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BMMutexAudioManager;
+			productName = BMMutexAudioManager;
+			productReference = 8265D71B1EBB6CC50079D2DD /* BMMutexAudioManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8265D7331EBB6CC50079D2DD /* BMMutexAudioManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8265D74B1EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManagerTests" */;
+			buildPhases = (
+				8265D7301EBB6CC50079D2DD /* Sources */,
+				8265D7311EBB6CC50079D2DD /* Frameworks */,
+				8265D7321EBB6CC50079D2DD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8265D7361EBB6CC50079D2DD /* PBXTargetDependency */,
+			);
+			name = BMMutexAudioManagerTests;
+			productName = BMMutexAudioManagerTests;
+			productReference = 8265D7341EBB6CC50079D2DD /* BMMutexAudioManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8265D73E1EBB6CC50079D2DD /* BMMutexAudioManagerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8265D74E1EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManagerUITests" */;
+			buildPhases = (
+				8265D73B1EBB6CC50079D2DD /* Sources */,
+				8265D73C1EBB6CC50079D2DD /* Frameworks */,
+				8265D73D1EBB6CC50079D2DD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8265D7411EBB6CC60079D2DD /* PBXTargetDependency */,
+			);
+			name = BMMutexAudioManagerUITests;
+			productName = BMMutexAudioManagerUITests;
+			productReference = 8265D73F1EBB6CC60079D2DD /* BMMutexAudioManagerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8265D7131EBB6CC50079D2DD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Li Zhiqiang";
+				TargetAttributes = {
+					8265D71A1EBB6CC50079D2DD = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 6CJH7SB2KM;
+						ProvisioningStyle = Automatic;
+					};
+					8265D7331EBB6CC50079D2DD = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 6CJH7SB2KM;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8265D71A1EBB6CC50079D2DD;
+					};
+					8265D73E1EBB6CC50079D2DD = {
+						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = 6CJH7SB2KM;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8265D71A1EBB6CC50079D2DD;
+					};
+				};
+			};
+			buildConfigurationList = 8265D7161EBB6CC50079D2DD /* Build configuration list for PBXProject "BMMutexAudioManager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8265D7121EBB6CC50079D2DD;
+			productRefGroup = 8265D71C1EBB6CC50079D2DD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8265D71A1EBB6CC50079D2DD /* BMMutexAudioManager */,
+				8265D7331EBB6CC50079D2DD /* BMMutexAudioManagerTests */,
+				8265D73E1EBB6CC50079D2DD /* BMMutexAudioManagerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8265D7191EBB6CC50079D2DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8265D75E1EBB70210079D2DD /* Assets.xcassets in Resources */,
+				8265D75F1EBB70210079D2DD /* LaunchScreen.storyboard in Resources */,
+				8265D7601EBB70210079D2DD /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D7321EBB6CC50079D2DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D73D1EBB6CC50079D2DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8265D7171EBB6CC50079D2DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8265D7621EBB70210079D2DD /* ViewController.m in Sources */,
+				8265D7611EBB70210079D2DD /* main.m in Sources */,
+				8265D75D1EBB70210079D2DD /* AppDelegate.m in Sources */,
+				8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D7301EBB6CC50079D2DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8265D7391EBB6CC50079D2DD /* BMMutexAudioManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8265D73B1EBB6CC50079D2DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8265D7441EBB6CC60079D2DD /* BMMutexAudioManagerUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8265D7361EBB6CC50079D2DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8265D71A1EBB6CC50079D2DD /* BMMutexAudioManager */;
+			targetProxy = 8265D7351EBB6CC50079D2DD /* PBXContainerItemProxy */;
+		};
+		8265D7411EBB6CC60079D2DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8265D71A1EBB6CC50079D2DD /* BMMutexAudioManager */;
+			targetProxy = 8265D7401EBB6CC60079D2DD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		8265D7571EBB70210079D2DD /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8265D7581EBB70210079D2DD /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8265D7461EBB6CC60079D2DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8265D7471EBB6CC60079D2DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8265D7491EBB6CC60079D2DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = "$(SRCROOT)/BMMutexAudioManagerDemo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8265D74A1EBB6CC60079D2DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = "$(SRCROOT)/BMMutexAudioManagerDemo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManager;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		8265D74C1EBB6CC60079D2DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = BMMutexAudioManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManagerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMMutexAudioManager.app/BMMutexAudioManager";
+			};
+			name = Debug;
+		};
+		8265D74D1EBB6CC60079D2DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = BMMutexAudioManagerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManagerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMMutexAudioManager.app/BMMutexAudioManager";
+			};
+			name = Release;
+		};
+		8265D74F1EBB6CC60079D2DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = BMMutexAudioManagerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManagerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = BMMutexAudioManager;
+			};
+			name = Debug;
+		};
+		8265D7501EBB6CC60079D2DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 6CJH7SB2KM;
+				INFOPLIST_FILE = BMMutexAudioManagerUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.BlueMercury.BMMutexAudioManagerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = BMMutexAudioManager;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8265D7161EBB6CC50079D2DD /* Build configuration list for PBXProject "BMMutexAudioManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8265D7461EBB6CC60079D2DD /* Debug */,
+				8265D7471EBB6CC60079D2DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8265D7481EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8265D7491EBB6CC60079D2DD /* Debug */,
+				8265D74A1EBB6CC60079D2DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8265D74B1EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8265D74C1EBB6CC60079D2DD /* Debug */,
+				8265D74D1EBB6CC60079D2DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8265D74E1EBB6CC60079D2DD /* Build configuration list for PBXNativeTarget "BMMutexAudioManagerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8265D74F1EBB6CC60079D2DD /* Debug */,
+				8265D7501EBB6CC60079D2DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8265D7131EBB6CC50079D2DD /* Project object */;
+}
