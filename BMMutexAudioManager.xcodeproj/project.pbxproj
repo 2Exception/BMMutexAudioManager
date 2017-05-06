@@ -16,6 +16,7 @@
 		8265D7611EBB70210079D2DD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D75A1EBB70210079D2DD /* main.m */; };
 		8265D7621EBB70210079D2DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D75C1EBB70210079D2DD /* ViewController.m */; };
 		8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */; };
+		8265D76A1EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		8265D75C1EBB70210079D2DD /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		8265D7631EBB71440079D2DD /* BMMutexAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMMutexAudioManager.h; sourceTree = "<group>"; };
 		8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMutexAudioManager.m; sourceTree = "<group>"; };
+		8265D7681EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMAudioPlayerDemoCellTableViewCell.h; sourceTree = "<group>"; };
+		8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMAudioPlayerDemoCellTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +142,8 @@
 				8265D75A1EBB70210079D2DD /* main.m */,
 				8265D75B1EBB70210079D2DD /* ViewController.h */,
 				8265D75C1EBB70210079D2DD /* ViewController.m */,
+				8265D7681EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.h */,
+				8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */,
 			);
 			path = BMMutexAudioManagerDemo;
 			sourceTree = "<group>";
@@ -280,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8265D7621EBB70210079D2DD /* ViewController.m in Sources */,
+				8265D76A1EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m in Sources */,
 				8265D7611EBB70210079D2DD /* main.m in Sources */,
 				8265D75D1EBB70210079D2DD /* AppDelegate.m in Sources */,
 				8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */,

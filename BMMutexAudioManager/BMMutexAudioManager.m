@@ -15,9 +15,9 @@
 - (float)duration {
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"blankSpace" withExtension:@"mp3"];
-    AVURLAsset *audioAsset=[AVURLAsset URLAssetWithURL:voiceURL options:nil];
-    CMTime audioDuration=audioAsset.duration;
-    float audioDurationSeconds=CMTimeGetSeconds(audioDuration);
+    AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:voiceURL options:nil];
+    CMTime audioDuration = audioAsset.duration;
+    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
     return audioDurationSeconds;
 }
 

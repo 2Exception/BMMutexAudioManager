@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef  NS_ENUM(NSUInteger, EBMPlayerStatus) {
+    EBMPlayerStatusStop = 0,
+    EBMPlayerStatusPlay,
+    EBMPlayerStatusPause,
+    EBMPlayerStatusUnDownload,
+    EBMPlayerStatusDownloading,
+    EBMPlayerStatusDownloaded
+};
+
 @interface BMMutexAudioManager : NSObject
 
 //可能需要一个block去返回cell的index和状态，用于更新按钮
@@ -24,6 +33,7 @@
  */
 - (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath;
 
+//在需要的时候设计这个方法
 - (float)duration;
 
 @end
