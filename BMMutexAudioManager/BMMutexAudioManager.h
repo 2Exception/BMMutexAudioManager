@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-typedef  NS_ENUM(NSUInteger, EBMPlayerStatus) {
+typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
     EBMPlayerStatusStop = 0,
     EBMPlayerStatusPlay,
     EBMPlayerStatusPause,
@@ -34,6 +35,15 @@ typedef  NS_ENUM(NSUInteger, EBMPlayerStatus) {
 - (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath;
 
 //在需要的时候设计这个方法
-- (float)duration;
+- (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension;
+
+@end
+
+@interface BMMutexAudioStatusModel : NSObject
+
+@property (nonatomic, assign) EBMPlayerStatus currentStatus;
+@property (nonatomic, strong) NSURL *audioURL;
+@property (nonatomic, assign) CGFloat duration;
+@property (nonatomic, assign) CGFloat currentProgress; // 0 <= currentProgress <= 1, it's a percentage
 
 @end
