@@ -24,6 +24,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configUI];
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"blankSpace" withExtension:@"mp3"];
+    [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[voiceURL absoluteString] cellIndexPath:[NSIndexPath indexPathForRow:4 inSection:2]];
 }
 
 #pragma mark - Init Method

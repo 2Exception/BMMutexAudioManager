@@ -17,6 +17,7 @@
 		8265D7621EBB70210079D2DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D75C1EBB70210079D2DD /* ViewController.m */; };
 		8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */; };
 		8265D76A1EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */; };
+		8265D76C1EC0B4080079D2DD /* blankSpace.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8265D76B1EC0B4070079D2DD /* blankSpace.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMMutexAudioManager.m; sourceTree = "<group>"; };
 		8265D7681EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMAudioPlayerDemoCellTableViewCell.h; sourceTree = "<group>"; };
 		8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMAudioPlayerDemoCellTableViewCell.m; sourceTree = "<group>"; };
+		8265D76B1EC0B4070079D2DD /* blankSpace.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = blankSpace.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				8265D75C1EBB70210079D2DD /* ViewController.m */,
 				8265D7681EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.h */,
 				8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */,
+				8265D76B1EC0B4070079D2DD /* blankSpace.mp3 */,
 			);
 			path = BMMutexAudioManagerDemo;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8265D75E1EBB70210079D2DD /* Assets.xcassets in Resources */,
+				8265D76C1EC0B4080079D2DD /* blankSpace.mp3 in Resources */,
 				8265D75F1EBB70210079D2DD /* LaunchScreen.storyboard in Resources */,
 				8265D7601EBB70210079D2DD /* Info.plist in Resources */,
 			);
