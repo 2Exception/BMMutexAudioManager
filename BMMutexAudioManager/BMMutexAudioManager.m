@@ -10,11 +10,14 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-@interface BMMutexAudioManager ()
+@interface BMMutexAudioManager () <AVAudioPlayerDelegate>
 
+@property (nonatomic, strong) AVAudioPlayer *privatePlayer;
+@property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) NSMutableDictionary *cellStatusDictionary; //需要考虑到indexPath变了以后,直接重置dictionary！
 @property (nonatomic, strong) NSIndexPath *currentPlayingIndexPath;
-@property (nonatomic, strong) NSIndexPath *lastPlayingIndexPath;
+@property (nonatomic, strong) BMMutexAudioStatusModel *currentPlayingModel;
+@property (nonatomic, strong) NSIndexPath *previousPlayingIndexPath;
 
 @end
 
@@ -38,18 +41,17 @@
     BOOL isVaild = [fileURL checkResourceIsReachableAndReturnError:nil];
     if (isVaild && indexPath) {
         if (self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]]) {
-            //判断这个cell当前的状态，按情况改写，cell播放结束以后应该相应的更新键值对
-        } else {//这个cell以前没播放过
+            BMMutexAudioStatusModel *statusModel = self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]];
+            [self playAudioWithStatusModel:statusModel indexPath:indexPath];
+        } else { //这个cell以前没播放过
             BMMutexAudioStatusModel *statusModel = [[BMMutexAudioStatusModel alloc] init];
             statusModel.audioURL = fileURL;
             statusModel.currentStatus = EBMPlayerStatusStop;
             statusModel.duration = [self durationWithVaildURL:fileURL];
             statusModel.currentProgress = 0;
             [self.cellStatusDictionary setObject:statusModel forKey:[self generateCellKeyStringWithIndexPath:indexPath]];
-            self.currentPlayingIndexPath = indexPath;
             //暂停之前播放的，开始播放这个
-            [self pauseOtherAudio];
-            [self playAudioWithStatusModel:statusModel];
+            [self playAudioWithStatusModel:statusModel indexPath:indexPath];
         }
     }
     return YES;
@@ -62,7 +64,7 @@
 }
 
 - (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath {
-    BMMutexAudioStatusModel *statusModel;
+    BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
     return statusModel;
 }
 
@@ -83,12 +85,81 @@
     return audioDurationSeconds;
 }
 
-- (void)playAudioWithStatusModel:(BMMutexAudioStatusModel *)statusModel {
-    
+- (void)playAudioWithStatusModel:(BMMutexAudioStatusModel *)statusModel indexPath:(NSIndexPath *)indexPath {
+    [self pauseCurrentAudio];
+    if (![self isTwoIndexPathEqual:self.previousPlayingIndexPath otherIndexPath:indexPath]) {
+        self.currentPlayingIndexPath = indexPath;
+        self.currentPlayingModel = statusModel;
+        self.privatePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:statusModel.audioURL error:nil];
+        self.privatePlayer.delegate = self;
+        statusModel.currentStatus = EBMPlayerStatusPlaying;
+
+        if (_timer == nil) {
+            _timer = [NSTimer scheduledTimerWithTimeInterval:0.01
+                                                      target:self
+                                                    selector:@selector(updateProgress)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        }
+        /*
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(routeChange:)
+                                                     name:AVAudioSessionRouteChangeNotification
+                                                   object:nil];*/
+        self.privatePlayer.currentTime = self.privatePlayer.duration * statusModel.currentProgress;
+        [self.privatePlayer play];
+        //[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    }
 }
 
-- (void)pauseOtherAudio {
-    
+- (void)pauseCurrentAudio {
+    self.previousPlayingIndexPath = self.currentPlayingIndexPath;
+    self.currentPlayingIndexPath = nil;
+    self.currentPlayingModel = nil;
+    [_timer invalidate];
+    _timer = nil;
+    [self.privatePlayer stop];
+    self.privatePlayer = nil;
+    BMMutexAudioStatusModel *statusModel =
+    [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:self.previousPlayingIndexPath]];
+    statusModel.currentStatus = EBMPlayerStatusPause;
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+/**
+ * @brief 获取当前播放器的播放进度
+ * @return progress播放进度
+ */
+- (float)getCurrentProgress {
+    if (self.privatePlayer) {
+        return self.privatePlayer.currentTime / self.privatePlayer.duration;
+    } else {
+        return 0;
+    }
+}
+
+- (BOOL)isTwoIndexPathEqual:(NSIndexPath *)indexPathA otherIndexPath:(NSIndexPath *)indexPathB {
+    if (indexPathA && indexPathB && indexPathA.section == indexPathB.section && indexPathA.row == indexPathB.row) {
+        return YES;
+    }
+    return NO;
+}
+
+#pragma mark - Event Response
+
+/**
+ * @brief 播放器在播放时实时更新播放进度（用于更新slider）
+ */
+- (void)updateProgress {
+    if (_timer == nil) {
+        return;
+    }
+    //进度条显示播放进度
+    float progress = [self getCurrentProgress];
+    self.currentPlayingModel.currentProgress = progress;
+    if ([self.delegate respondsToSelector:@selector(mutexAudioManagerPlayingCell:progress:)]) {
+        [self.delegate mutexAudioManagerPlayingCell:self.currentPlayingIndexPath progress:progress];
+    }
 }
 
 #pragma mark - Lazy Load
@@ -99,4 +170,8 @@
     }
     return _cellStatusDictionary;
 }
+@end
+
+@implementation BMMutexAudioStatusModel
+
 @end

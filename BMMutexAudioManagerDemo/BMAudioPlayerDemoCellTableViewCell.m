@@ -7,8 +7,9 @@
 //
 
 #import "BMAudioPlayerDemoCellTableViewCell.h"
+#import "BMMutexAudioManager.h"
 
-@interface BMAudioPlayerDemoCellTableViewCell()
+@interface BMAudioPlayerDemoCellTableViewCell ()
 
 @property (nonatomic, strong) UIButton *controlButton;
 @property (nonatomic, strong) UISlider *voiceSlider;
@@ -26,11 +27,39 @@
     return self;
 }
 
+#pragma mark - Public Method
+
+- (void)changeButtonImageWithPlayerStatus:(NSInteger)status {
+    NSString *imageName;
+    switch (status) {
+        case EBMPlayerStatusStop: {
+            imageName = @"icon_play";
+        } break;
+        case EBMPlayerStatusPause: {
+            imageName = @"icon_play";
+        } break;
+        case EBMPlayerStatusPlaying: {
+            imageName = @"icon_pause";
+        } break;
+        default: { imageName = @"icon_download"; } break;
+    }
+    [self.controlButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+}
+
 #pragma mark - Init Method
 
 - (void)configUI {
     [self addSubview:self.controlButton];
     [self addSubview:self.voiceSlider];
+    [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
+}
+
+#pragma mark - Event Response
+
+- (void)controlButtonClick {
+    if (self.controlButtonClickBlock) {
+        self.controlButtonClickBlock();
+    }
 }
 
 #pragma mark - Lazy Load
@@ -38,7 +67,6 @@
 - (UIButton *)controlButton {
     if (nil == _controlButton) {
         _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 10, 25, 25)];
-        [_controlButton setBackgroundColor:[UIColor redColor]];
     }
     return _controlButton;
 }

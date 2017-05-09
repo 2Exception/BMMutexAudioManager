@@ -10,10 +10,12 @@
 #import "BMAudioPlayerDemoCellTableViewCell.h"
 #import "BMMutexAudioManager.h"
 
+#define WEAKSELF() __weak __typeof(&*self) weakSelf = self
+
 #define SCREEN_WIDTH CGRectGetWidth([[UIScreen mainScreen] bounds])
 #define SCREEN_HEIGHT CGRectGetHeight([[UIScreen mainScreen] bounds])
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, BMMutexAudioManagerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -24,9 +26,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configUI];
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:@"blankSpace" withExtension:@"mp3"];
-    [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[voiceURL absoluteString] cellIndexPath:[NSIndexPath indexPathForRow:4 inSection:2]];
+    [BMMutexAudioManager sharedInstance].delegate = self;
+}
+
+- (void)dealloc {
+    [BMMutexAudioManager sharedInstance].delegate = nil;
 }
 
 #pragma mark - Init Method
@@ -38,10 +42,32 @@
     [self.tableView registerClass:[BMAudioPlayerDemoCellTableViewCell class] forCellReuseIdentifier:@"cell"];
 }
 
+#pragma mark - Private Method
+
+- (NSString *)generateAudioURLWithIndexPath:(NSIndexPath *)indexPath {
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:[NSString stringWithFormat:@"%ld.mp3", indexPath.row % 7]
+                                                             withExtension:nil];
+    return [voiceURL absoluteString];
+}
+
 #pragma mark - Delegate And DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BMAudioPlayerDemoCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+
+    BMMutexAudioStatusModel *statusModel = [[BMMutexAudioManager sharedInstance] queryStatusModelWithIndexPath:indexPath];
+    if (statusModel) {
+        [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
+    } else {
+        [cell changeButtonImageWithPlayerStatus:EBMPlayerStatusStop];
+    }
+
+    WEAKSELF();
+    cell.controlButtonClickBlock = ^() {
+        [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[weakSelf generateAudioURLWithIndexPath:indexPath]
+                                                            cellIndexPath:indexPath];
+    };
     return cell;
 }
 
@@ -51,6 +77,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 45;
+}
+
+#pragma mark - Delegate And DataSource
+
+- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress {
+    NSLog(@"第%ld块，第%ld行，当前进度：%lf", playingCellIndexPath.section, playingCellIndexPath.row, progress);
 }
 
 #pragma mark - Lazy Load

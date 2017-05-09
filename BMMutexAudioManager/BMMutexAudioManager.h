@@ -20,7 +20,25 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
     EBMPlayerStatusDownloaded
 };
 
+@protocol BMMutexAudioManagerDelegate <NSObject>
+@optional
+//音频改变的时候用来更新
+- (void)mutexAudioManagerDidChangeToCurrentPlayingCell:(NSIndexPath *)currentIndexPath
+                         currentPlayingCellStatusModel:(BMMutexAudioStatusModel *)currentStatusModel
+                                   previousPlayingCell:(NSIndexPath *)previousIndexPath
+                        previousPlayingCellStatusModel:(BMMutexAudioStatusModel *)previousStatusModel;
+
+//用来更新正在播放的cell的进度条
+- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress;
+
+//一个cell播放完毕，没有启动另一个播放
+- (void)mutexAudioManagerDidFinishPlaying:(NSIndexPath *)finishedCellIndexPath;
+
+@end
+
 @interface BMMutexAudioManager : NSObject
+
+@property (nonatomic, weak) id<BMMutexAudioManagerDelegate> delegate;
 
 + (instancetype)sharedInstance;
 
