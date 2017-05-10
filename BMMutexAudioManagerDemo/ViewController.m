@@ -46,7 +46,7 @@
 
 - (NSString *)generateAudioURLWithIndexPath:(NSIndexPath *)indexPath {
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:[NSString stringWithFormat:@"%ld.mp3", indexPath.row % 7]
+    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:[NSString stringWithFormat:@"%ld.mp3", indexPath.row % 10]
                                                              withExtension:nil];
     return [voiceURL absoluteString];
 }
@@ -62,11 +62,17 @@
     } else {
         [cell changeButtonImageWithPlayerStatus:EBMPlayerStatusStop];
     }
+    [cell changeSliderPositionWithProgress:statusModel.currentProgress];
 
     WEAKSELF();
     cell.controlButtonClickBlock = ^() {
         [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[weakSelf generateAudioURLWithIndexPath:indexPath]
                                                             cellIndexPath:indexPath];
+    };
+    
+    cell.returnSliderValueBlock = ^(float value) {
+        NSLog(@"拖动值：%lf",value);
+        [[BMMutexAudioManager sharedInstance] setPlayerProgressByProgress:value cellIndexPath:indexPath];
     };
     return cell;
 }
@@ -76,13 +82,21 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 45;
+    return 245;
 }
 
 #pragma mark - Delegate And DataSource
 
 - (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress {
     NSLog(@"第%ld块，第%ld行，当前进度：%lf", playingCellIndexPath.section, playingCellIndexPath.row, progress);
+    BMAudioPlayerDemoCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:playingCellIndexPath];
+    [cell changeSliderPositionWithProgress:progress];
+}
+
+-(void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel {
+    BMAudioPlayerDemoCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:changedIndexPath];
+    [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
+    [cell changeSliderPositionWithProgress:statusModel.currentProgress];
 }
 
 #pragma mark - Lazy Load

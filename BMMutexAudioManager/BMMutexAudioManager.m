@@ -57,6 +57,10 @@
     return YES;
 }
 
+- (void)clickStopButtonWithCellIndexPath:(NSIndexPath *)indexPath {
+    [self pauseOrStopAudioInIndexPath:indexPath status:EBMPlayerStatusStop];
+}
+
 - (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension {
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
     NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:resourceName withExtension:extension];
@@ -66,6 +70,16 @@
 - (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath {
     BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
     return statusModel;
+}
+
+- (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath {
+    BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
+    statusModel.currentProgress = progress;
+    if ([self isTwoIndexPathEqual:self.currentPlayingIndexPath otherIndexPath:indexPath] && [self.privatePlayer isPlaying]) {
+        [self.privatePlayer pause];
+        self.privatePlayer.currentTime = self.privatePlayer.duration * progress;
+        [self.privatePlayer play];
+    }
 }
 
 #pragma mark - Private Method
@@ -86,8 +100,10 @@
 }
 
 - (void)playAudioWithStatusModel:(BMMutexAudioStatusModel *)statusModel indexPath:(NSIndexPath *)indexPath {
-    [self pauseCurrentAudio];
-    if (![self isTwoIndexPathEqual:self.previousPlayingIndexPath otherIndexPath:indexPath]) {
+    if ([self.privatePlayer isPlaying]) {
+        [self pauseCurrentAudio];
+    }
+    if (![self isTwoIndexPathEqual:self.previousPlayingIndexPath otherIndexPath:indexPath] || statusModel.currentStatus == EBMPlayerStatusStop) {
         self.currentPlayingIndexPath = indexPath;
         self.currentPlayingModel = statusModel;
         self.privatePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:statusModel.audioURL error:nil];
@@ -108,22 +124,34 @@
                                                    object:nil];*/
         self.privatePlayer.currentTime = self.privatePlayer.duration * statusModel.currentProgress;
         [self.privatePlayer play];
+        [self cellStatusDidChanged:self.currentPlayingIndexPath statusModel:statusModel];
         //[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
 }
 
 - (void)pauseCurrentAudio {
-    self.previousPlayingIndexPath = self.currentPlayingIndexPath;
-    self.currentPlayingIndexPath = nil;
-    self.currentPlayingModel = nil;
-    [_timer invalidate];
-    _timer = nil;
-    [self.privatePlayer stop];
-    self.privatePlayer = nil;
-    BMMutexAudioStatusModel *statusModel =
-    [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:self.previousPlayingIndexPath]];
-    statusModel.currentStatus = EBMPlayerStatusPause;
+    [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusPause];
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+- (void)pauseOrStopAudioInIndexPath:(NSIndexPath *)indexPath status:(EBMPlayerStatus)status {
+    if ([self isTwoIndexPathEqual:indexPath otherIndexPath:self.currentPlayingIndexPath] &&
+        (status == EBMPlayerStatusStop || status == EBMPlayerStatusPause)) {
+        self.previousPlayingIndexPath = self.currentPlayingIndexPath;
+        self.currentPlayingIndexPath = nil;
+        self.currentPlayingModel = nil;
+        [_timer invalidate];
+        _timer = nil;
+        [self.privatePlayer stop];
+        self.privatePlayer = nil;
+        BMMutexAudioStatusModel *statusModel =
+        [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:self.previousPlayingIndexPath]];
+        statusModel.currentStatus = status;
+        if (status == EBMPlayerStatusStop) {
+            statusModel.currentProgress = 0;
+        }
+        [self cellStatusDidChanged:self.previousPlayingIndexPath statusModel:statusModel];
+    }
 }
 
 /**
@@ -145,6 +173,15 @@
     return NO;
 }
 
+#pragma mark - Delegate And DataSource
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    if ([self.delegate respondsToSelector:@selector(mutexAudioManagerDidChanged:statusModel:)]) {
+        [self.delegate mutexAudioManagerDidChanged:self.currentPlayingIndexPath statusModel:self.currentPlayingModel];
+    }
+    [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusStop];
+}
+
 #pragma mark - Event Response
 
 /**
@@ -159,6 +196,12 @@
     self.currentPlayingModel.currentProgress = progress;
     if ([self.delegate respondsToSelector:@selector(mutexAudioManagerPlayingCell:progress:)]) {
         [self.delegate mutexAudioManagerPlayingCell:self.currentPlayingIndexPath progress:progress];
+    }
+}
+
+- (void)cellStatusDidChanged:(NSIndexPath *)changedCellIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel {
+    if ([self.delegate respondsToSelector:@selector(mutexAudioManagerDidChanged:statusModel:)]) {
+        [self.delegate mutexAudioManagerDidChanged:changedCellIndexPath statusModel:statusModel];
     }
 }
 

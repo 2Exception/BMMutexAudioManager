@@ -6,6 +6,9 @@
 //  Copyright © 2017年 Li Zhiqiang. All rights reserved.
 //
 
+
+//如果一直出现log，需要edit-scheme ，设置OS_ACTIVITY_MODE 为disable  http://www.cnblogs.com/jingxin1992/p/6290641.html
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -23,10 +26,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 @protocol BMMutexAudioManagerDelegate <NSObject>
 @optional
 //音频改变的时候用来更新
-- (void)mutexAudioManagerDidChangeToCurrentPlayingCell:(NSIndexPath *)currentIndexPath
-                         currentPlayingCellStatusModel:(BMMutexAudioStatusModel *)currentStatusModel
-                                   previousPlayingCell:(NSIndexPath *)previousIndexPath
-                        previousPlayingCellStatusModel:(BMMutexAudioStatusModel *)previousStatusModel;
+- (void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel;
 
 //用来更新正在播放的cell的进度条
 - (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress;

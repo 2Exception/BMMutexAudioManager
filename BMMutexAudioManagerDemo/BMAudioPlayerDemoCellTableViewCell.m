@@ -46,12 +46,17 @@
     [self.controlButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 }
 
+- (void)changeSliderPositionWithProgress:(CGFloat)progress {
+    self.voiceSlider.value = progress;
+}
+
 #pragma mark - Init Method
 
 - (void)configUI {
     [self addSubview:self.controlButton];
     [self addSubview:self.voiceSlider];
     [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.voiceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 #pragma mark - Event Response
@@ -62,18 +67,28 @@
     }
 }
 
+- (void)sliderValueChanged:(id)sender {
+    if ([sender isKindOfClass:[UISlider class]]) {
+        UISlider *slider = (UISlider *)sender;
+        if (self.returnSliderValueBlock) {
+            self.returnSliderValueBlock(slider.value);
+        }
+    }
+}
+
 #pragma mark - Lazy Load
 
 - (UIButton *)controlButton {
     if (nil == _controlButton) {
-        _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 10, 25, 25)];
+        _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 30, 50, 50)];
     }
     return _controlButton;
 }
 
 - (UISlider *)voiceSlider {
     if (nil == _voiceSlider) {
-        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(70, 10, 200, 25)];
+        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 42.5, 200, 25)];
+        _voiceSlider.continuous = NO;//重点
     }
     return _voiceSlider;
 }

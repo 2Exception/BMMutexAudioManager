@@ -10,7 +10,7 @@
 
 @interface BMAudioPlayerDemoCellTableViewCell : UITableViewCell
 
-typedef void (^ReturnSliderValueBlock)(float value, NSIndexPath *indexPath);
+typedef void (^ReturnSliderValueBlock)(float value);
 typedef void (^ControlButtonClickBlock)(void);
 
 @property (copy, nonatomic) ReturnSliderValueBlock returnSliderValueBlock;
@@ -18,4 +18,5 @@ typedef void (^ControlButtonClickBlock)(void);
 
 - (void)changeButtonImageWithPlayerStatus:(NSInteger)status;
 
+- (void)changeSliderPositionWithProgress:(CGFloat)progress;
 @end
