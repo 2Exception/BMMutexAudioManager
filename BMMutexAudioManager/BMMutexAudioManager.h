@@ -6,7 +6,6 @@
 //  Copyright © 2017年 Li Zhiqiang. All rights reserved.
 //
 
-
 //如果一直出现log，需要edit-scheme ，设置OS_ACTIVITY_MODE 为disable  http://www.cnblogs.com/jingxin1992/p/6290641.html
 
 #import <Foundation/Foundation.h>
@@ -15,12 +14,12 @@
 @class BMMutexAudioStatusModel;
 
 typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
-    EBMPlayerStatusStop = 0,
+    EBMPlayerStatusStop = 919,
     EBMPlayerStatusPlaying,
     EBMPlayerStatusPause,
     EBMPlayerStatusUnDownload,
     EBMPlayerStatusDownloading,
-    EBMPlayerStatusDownloaded
+    EBMPlayerStatusRetryDownload
 };
 
 @protocol BMMutexAudioManagerDelegate <NSObject>
@@ -42,7 +41,6 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 
 + (instancetype)sharedInstance;
 
-//可能需要一个block去返回cell的index和状态，用于更新按钮
 - (BOOL)clickPlayButtonWithAudioURL:(NSString *)URL cellIndexPath:(NSIndexPath *)indexPath;
 
 - (void)clickStopButtonWithCellIndexPath:(NSIndexPath *)indexPath;
@@ -58,7 +56,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
  * @param indexPath cell的indexPath
  * @return BMMutexAudioStatusModel 状态model
  */
-- (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath;
+- (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath audioURL:(NSString *)audioURL;
 
 //在需要的时候设计这个方法
 - (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension;
@@ -69,6 +67,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 
 @property (nonatomic, assign) EBMPlayerStatus currentStatus;
 @property (nonatomic, strong) NSURL *audioURL;
+@property (nonatomic, strong) NSURL *localPathURL;
 @property (nonatomic, assign) CGFloat duration;
 @property (nonatomic, assign) CGFloat currentProgress; // 0 <= currentProgress <= 1, it's a percentage
 

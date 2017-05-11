@@ -7,8 +7,12 @@
 //
 
 #import "BMMutexAudioManager.h"
+#import "BMAduioDownloadManager.h"
 #import <AVFoundation/AVFoundation.h>
+#import <CommonCrypto/CommonDigest.h>
 #import <MediaPlayer/MediaPlayer.h>
+
+#define WEAKSELF() __weak __typeof(&*self) weakSelf = self
 
 @interface BMMutexAudioManager () <AVAudioPlayerDelegate>
 
@@ -37,23 +41,31 @@
 #pragma mark - Public Method
 
 - (BOOL)clickPlayButtonWithAudioURL:(NSString *)URLString cellIndexPath:(NSIndexPath *)indexPath {
-    NSURL *fileURL = [NSURL URLWithString:URLString];
-    BOOL isVaild = [fileURL checkResourceIsReachableAndReturnError:nil];
-    if (isVaild && indexPath) {
-        if (self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]]) {
-            BMMutexAudioStatusModel *statusModel = self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]];
-            [self playAudioWithStatusModel:statusModel indexPath:indexPath];
-        } else { //这个cell以前没播放过
-            BMMutexAudioStatusModel *statusModel = [[BMMutexAudioStatusModel alloc] init];
-            statusModel.audioURL = fileURL;
-            statusModel.currentStatus = EBMPlayerStatusStop;
-            statusModel.duration = [self durationWithVaildURL:fileURL];
-            statusModel.currentProgress = 0;
-            [self.cellStatusDictionary setObject:statusModel forKey:[self generateCellKeyStringWithIndexPath:indexPath]];
-            //暂停之前播放的，开始播放这个
+    WEAKSELF();
+    if (self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]]) {
+        __block BMMutexAudioStatusModel *statusModel = self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]];
+        if (![statusModel.localPathURL checkResourceIsReachableAndReturnError:nil]) {
+            statusModel.currentStatus = EBMPlayerStatusDownloading;
+            [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
+            [self downloadAudioWithURL:URLString
+            success:^(NSString *voiceName, EBMAudioDownloadStatus voiceDownloadStatus, NSString *voicePath) {
+                if (voiceDownloadStatus == EBMAudioDownloadStatusSuccess) {
+                    NSLog(@"Download success");
+                    statusModel.currentStatus = EBMPlayerStatusStop;
+                    statusModel.localPathURL = [NSURL fileURLWithPath:voicePath];
+                    [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
+                }
+            }
+            fail:^(EBMAudioDownloadStatus voiceDownloadStatus) {
+                NSLog(@"Download fail");
+                statusModel.currentStatus = EBMPlayerStatusRetryDownload;
+                [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
+            }];
+        } else {
             [self playAudioWithStatusModel:statusModel indexPath:indexPath];
         }
     }
+
     return YES;
 }
 
@@ -67,8 +79,24 @@
     return [self durationWithVaildURL:voiceURL];
 }
 
-- (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath {
+- (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath audioURL:(NSString *)audioURL {
     BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
+    if (!statusModel) {
+        statusModel = [[BMMutexAudioStatusModel alloc] init];
+        statusModel.audioURL = [NSURL URLWithString:audioURL];
+        [self.cellStatusDictionary setObject:statusModel forKey:[self generateCellKeyStringWithIndexPath:indexPath]];
+        if ([[BMAduioDownloadManager sharedInstance] voiceLocalSavePathAtVoiceName:[self generateMD5WithString:audioURL]].length > 0) {
+            statusModel.localPathURL = [NSURL fileURLWithPath:[[BMAduioDownloadManager sharedInstance]
+                                                              voiceLocalSavePathAtVoiceName:[self generateMD5WithString:audioURL]]];
+        }
+        if ([statusModel.localPathURL checkResourceIsReachableAndReturnError:nil]) {
+            statusModel.currentStatus = EBMPlayerStatusStop;
+        } else {
+            statusModel.currentStatus = EBMPlayerStatusUnDownload;
+        }
+        statusModel.duration = [self durationWithVaildURL:statusModel.localPathURL];
+        statusModel.currentProgress = 0;
+    }
     return statusModel;
 }
 
@@ -106,7 +134,7 @@
     if (![self isTwoIndexPathEqual:self.previousPlayingIndexPath otherIndexPath:indexPath] || statusModel.currentStatus == EBMPlayerStatusStop) {
         self.currentPlayingIndexPath = indexPath;
         self.currentPlayingModel = statusModel;
-        self.privatePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:statusModel.audioURL error:nil];
+        self.privatePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:statusModel.localPathURL error:nil];
         self.privatePlayer.delegate = self;
         statusModel.currentStatus = EBMPlayerStatusPlaying;
 
@@ -173,6 +201,43 @@
     return NO;
 }
 
+- (void)downloadAudioWithURL:(NSString *)URLString
+                     success:(nullable void (^)(NSString *voiceName, EBMAudioDownloadStatus voiceDownloadStatus, NSString *voicePath))successBlock
+                        fail:(nullable void (^)(EBMAudioDownloadStatus voiceDownloadStatus))failBlock {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setValue:URLString forKey:@"voiceUrl"];
+    [dict setValue:[self generateMD5WithString:URLString] forKey:@"voiceName"];
+    [[BMAduioDownloadManager sharedInstance] asynchronousVoiceDownload:dict];
+    [BMAduioDownloadManager sharedInstance].voiceDownloadSuccessBlock =
+    ^(NSString *voiceName, EBMAudioDownloadStatus voiceDownloadStatus, NSString *voicePath) {
+        if (voiceDownloadStatus == EBMAudioDownloadStatusSuccess) {
+            successBlock(voiceName, voiceDownloadStatus, voicePath);
+        } else {
+            failBlock(voiceDownloadStatus);
+        }
+        
+    };
+}
+
+- (NSString *)generateMD5WithString:(NSString *)str {
+
+    // Create pointer to the string as UTF8
+    const char *ptr = [str UTF8String];
+
+    // Create byte array of unsigned chars
+    unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
+
+    // Create 16 byte MD5 hash value, store in buffer
+    CC_MD5(ptr, (CC_LONG)strlen(ptr), md5Buffer);
+
+    // Convert MD5 value in the buffer to NSString of hex values
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [output appendFormat:@"%02x", md5Buffer[i]];
+    }
+
+    return output;
+}
 #pragma mark - Delegate And DataSource
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {

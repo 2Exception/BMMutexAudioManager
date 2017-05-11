@@ -45,10 +45,7 @@
 #pragma mark - Private Method
 
 - (NSString *)generateAudioURLWithIndexPath:(NSIndexPath *)indexPath {
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:[NSString stringWithFormat:@"%ld.mp3", indexPath.row % 10]
-                                                             withExtension:nil];
-    return [voiceURL absoluteString];
+    return [NSString stringWithFormat:@"https://s3-us-west-2.amazonaws.com/qqxybucket/%ld.mp3", indexPath.row];
 }
 
 #pragma mark - Delegate And DataSource
@@ -56,7 +53,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     BMAudioPlayerDemoCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 
-    BMMutexAudioStatusModel *statusModel = [[BMMutexAudioManager sharedInstance] queryStatusModelWithIndexPath:indexPath];
+    BMMutexAudioStatusModel *statusModel =
+    [[BMMutexAudioManager sharedInstance] queryStatusModelWithIndexPath:indexPath
+                                                               audioURL:[self generateAudioURLWithIndexPath:indexPath]];
     if (statusModel) {
         [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
     } else {
@@ -64,14 +63,13 @@
     }
     [cell changeSliderPositionWithProgress:statusModel.currentProgress];
 
-    WEAKSELF();
     cell.controlButtonClickBlock = ^() {
-        [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[weakSelf generateAudioURLWithIndexPath:indexPath]
+        [[BMMutexAudioManager sharedInstance] clickPlayButtonWithAudioURL:[self generateAudioURLWithIndexPath:indexPath]
                                                             cellIndexPath:indexPath];
     };
-    
+
     cell.returnSliderValueBlock = ^(float value) {
-        NSLog(@"拖动值：%lf",value);
+        NSLog(@"拖动值：%lf", value);
         [[BMMutexAudioManager sharedInstance] setPlayerProgressByProgress:value cellIndexPath:indexPath];
     };
     return cell;
@@ -93,10 +91,17 @@
     [cell changeSliderPositionWithProgress:progress];
 }
 
--(void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel {
+- (void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel {
     BMAudioPlayerDemoCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:changedIndexPath];
-    [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
-    [cell changeSliderPositionWithProgress:statusModel.currentProgress];
+    if ([NSThread isMainThread]) {
+        [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
+        [cell changeSliderPositionWithProgress:statusModel.currentProgress];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
+            [cell changeSliderPositionWithProgress:statusModel.currentProgress];
+        });
+    }
 }
 
 #pragma mark - Lazy Load

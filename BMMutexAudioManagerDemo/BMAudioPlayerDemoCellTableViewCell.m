@@ -9,6 +9,8 @@
 #import "BMAudioPlayerDemoCellTableViewCell.h"
 #import "BMMutexAudioManager.h"
 
+static NSString *kRotationAnimationKey = @"rotationAnimation";
+
 @interface BMAudioPlayerDemoCellTableViewCell ()
 
 @property (nonatomic, strong) UIButton *controlButton;
@@ -31,6 +33,7 @@
 
 - (void)changeButtonImageWithPlayerStatus:(NSInteger)status {
     NSString *imageName;
+    [self endAnimation:self.controlButton];
     switch (status) {
         case EBMPlayerStatusStop: {
             imageName = @"icon_play";
@@ -40,6 +43,16 @@
         } break;
         case EBMPlayerStatusPlaying: {
             imageName = @"icon_pause";
+        } break;
+        case EBMPlayerStatusUnDownload: {
+            imageName = @"icon_download";
+        } break;
+        case EBMPlayerStatusDownloading: {
+            imageName = @"icon_loading";
+            [self startAnimation:self.controlButton];
+        } break;
+        case EBMPlayerStatusRetryDownload: {
+            imageName = @"icon_download";
         } break;
         default: { imageName = @"icon_download"; } break;
     }
@@ -57,6 +70,25 @@
     [self addSubview:self.voiceSlider];
     [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.voiceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+}
+
+#pragma mark - Private Method
+
+- (void)startAnimation:(UIView *)view {
+
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath: @"transform" ];
+    rotationAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    //围绕Z轴旋转，垂直与屏幕
+    rotationAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/2.0, 0.0, 0.0, 1.0) ];
+    rotationAnimation.duration = 0.25;
+    //旋转效果累计，先转180度，接着再旋转180度，从而实现360旋转
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = MAXFLOAT;
+    [view.layer addAnimation:rotationAnimation forKey:kRotationAnimationKey];
+}
+
+- (void)endAnimation:(UIView *)view {
+    [view.layer removeAnimationForKey:kRotationAnimationKey];
 }
 
 #pragma mark - Event Response
@@ -88,7 +120,6 @@
 - (UISlider *)voiceSlider {
     if (nil == _voiceSlider) {
         _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 42.5, 200, 25)];
-        _voiceSlider.continuous = NO;//重点
     }
     return _voiceSlider;
 }
