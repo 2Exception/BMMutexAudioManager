@@ -8,6 +8,7 @@
 
 #import "BMAudioPlayerDemoCellTableViewCell.h"
 #import "BMMutexAudioManager.h"
+#import "CustomView.h"
 
 static NSString *kRotationAnimationKey = @"rotationAnimation";
 
@@ -15,6 +16,8 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 @property (nonatomic, strong) UIButton *controlButton;
 @property (nonatomic, strong) UISlider *voiceSlider;
+@property (nonatomic, strong) CustomView *starButton;
+@property (nonatomic, assign) BOOL flag;
 
 @end
 
@@ -69,6 +72,8 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     [self addSubview:self.controlButton];
     [self addSubview:self.voiceSlider];
     [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.starButton];
+    self.flag = YES;
     [self.voiceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -76,10 +81,10 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 - (void)startAnimation:(UIView *)view {
 
-    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath: @"transform" ];
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform"];
     rotationAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
     //围绕Z轴旋转，垂直与屏幕
-    rotationAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/2.0, 0.0, 0.0, 1.0) ];
+    rotationAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI / 2.0, 0.0, 0.0, 1.0)];
     rotationAnimation.duration = 0.25;
     //旋转效果累计，先转180度，接着再旋转180度，从而实现360旋转
     rotationAnimation.cumulative = YES;
@@ -108,6 +113,20 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     }
 }
 
+- (void)starButtonTap {
+    if (self.flag) {
+        [self.starButton addUntitled1AnimationCompletionBlock:^(BOOL finished) {
+            NSLog(@"positive");
+        }];
+    } else {
+        [self.starButton addUntitled1AnimationReverse:YES
+                                      completionBlock:^(BOOL finished) {
+                                          NSLog(@"reserve");
+                                      }];
+    }
+    self.flag = !self.flag;
+}
+
 #pragma mark - Lazy Load
 
 - (UIButton *)controlButton {
@@ -117,9 +136,18 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     return _controlButton;
 }
 
+- (CustomView *)starButton {
+    if (nil == _starButton) {
+        _starButton = [[CustomView alloc] initWithFrame:CGRectMake(260, 40, 30, 30)];
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(starButtonTap)];
+        [_starButton addGestureRecognizer:gesture];
+    }
+    return _starButton;
+}
+
 - (UISlider *)voiceSlider {
     if (nil == _voiceSlider) {
-        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 42.5, 200, 25)];
+        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 42.5, 160, 25)];
     }
     return _voiceSlider;
 }

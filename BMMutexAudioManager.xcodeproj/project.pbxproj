@@ -18,6 +18,8 @@
 		8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7641EBB71440079D2DD /* BMMutexAudioManager.m */; };
 		8265D76A1EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */; };
 		82A48AB71EC44821007E59E6 /* BMAduioDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A48AB61EC44820007E59E6 /* BMAduioDownloadManager.m */; };
+		82C3B5AC1EC6057D001F43E7 /* CustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C3B5A91EC6057D001F43E7 /* CustomView.m */; };
+		82C3B5AD1EC6057D001F43E7 /* QCMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C3B5AB1EC6057D001F43E7 /* QCMethod.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,10 @@
 		8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMAudioPlayerDemoCellTableViewCell.m; sourceTree = "<group>"; };
 		82A48AB51EC44820007E59E6 /* BMAduioDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMAduioDownloadManager.h; sourceTree = "<group>"; };
 		82A48AB61EC44820007E59E6 /* BMAduioDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMAduioDownloadManager.m; sourceTree = "<group>"; };
+		82C3B5A81EC6057D001F43E7 /* CustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomView.h; sourceTree = "<group>"; };
+		82C3B5A91EC6057D001F43E7 /* CustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomView.m; sourceTree = "<group>"; };
+		82C3B5AA1EC6057D001F43E7 /* QCMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QCMethod.h; sourceTree = "<group>"; };
+		82C3B5AB1EC6057D001F43E7 /* QCMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCMethod.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +145,7 @@
 		8265D7531EBB70210079D2DD /* BMMutexAudioManagerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				82C3B5A71EC6057D001F43E7 /* StarButton */,
 				8265D7541EBB70210079D2DD /* AppDelegate.h */,
 				8265D7551EBB70210079D2DD /* AppDelegate.m */,
 				8265D7561EBB70210079D2DD /* Assets.xcassets */,
@@ -151,6 +158,17 @@
 				8265D7691EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m */,
 			);
 			path = BMMutexAudioManagerDemo;
+			sourceTree = "<group>";
+		};
+		82C3B5A71EC6057D001F43E7 /* StarButton */ = {
+			isa = PBXGroup;
+			children = (
+				82C3B5A81EC6057D001F43E7 /* CustomView.h */,
+				82C3B5A91EC6057D001F43E7 /* CustomView.m */,
+				82C3B5AA1EC6057D001F43E7 /* QCMethod.h */,
+				82C3B5AB1EC6057D001F43E7 /* QCMethod.m */,
+			);
+			path = StarButton;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,8 +309,10 @@
 			files = (
 				8265D7621EBB70210079D2DD /* ViewController.m in Sources */,
 				8265D76A1EBE18A50079D2DD /* BMAudioPlayerDemoCellTableViewCell.m in Sources */,
+				82C3B5AD1EC6057D001F43E7 /* QCMethod.m in Sources */,
 				8265D7611EBB70210079D2DD /* main.m in Sources */,
 				8265D75D1EBB70210079D2DD /* AppDelegate.m in Sources */,
+				82C3B5AC1EC6057D001F43E7 /* CustomView.m in Sources */,
 				8265D7651EBB71440079D2DD /* BMMutexAudioManager.m in Sources */,
 				82A48AB71EC44821007E59E6 /* BMAduioDownloadManager.m in Sources */,
 			);
