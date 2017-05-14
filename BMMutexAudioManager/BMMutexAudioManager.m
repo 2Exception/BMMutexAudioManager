@@ -40,7 +40,7 @@
 
 #pragma mark - Public Method
 
-- (BOOL)clickPlayButtonWithAudioURL:(NSString *)URLString cellIndexPath:(NSIndexPath *)indexPath {
+- (void)clickPlayButtonWithAudioURL:(NSString *)URLString cellIndexPath:(NSIndexPath *)indexPath {
     WEAKSELF();
     if (self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]]) {
         __block BMMutexAudioStatusModel *statusModel = self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]];
@@ -65,18 +65,20 @@
             [self playAudioWithStatusModel:statusModel indexPath:indexPath];
         }
     }
-
-    return YES;
 }
 
 - (void)clickStopButtonWithCellIndexPath:(NSIndexPath *)indexPath {
     [self pauseOrStopAudioInIndexPath:indexPath status:EBMPlayerStatusStop];
 }
 
-- (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension {
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:resourceName withExtension:extension];
-    return [self durationWithVaildURL:voiceURL];
+- (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath {
+    BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
+    statusModel.currentProgress = progress;
+    if ([self isTwoIndexPathEqual:self.currentPlayingIndexPath otherIndexPath:indexPath] && [self.privatePlayer isPlaying]) {
+        [self.privatePlayer pause];
+        self.privatePlayer.currentTime = self.privatePlayer.duration * progress;
+        [self.privatePlayer play];
+    }
 }
 
 - (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath audioURL:(NSString *)audioURL {
@@ -98,16 +100,6 @@
         statusModel.currentProgress = 0;
     }
     return statusModel;
-}
-
-- (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath {
-    BMMutexAudioStatusModel *statusModel = [self.cellStatusDictionary objectForKey:[self generateCellKeyStringWithIndexPath:indexPath]];
-    statusModel.currentProgress = progress;
-    if ([self isTwoIndexPathEqual:self.currentPlayingIndexPath otherIndexPath:indexPath] && [self.privatePlayer isPlaying]) {
-        [self.privatePlayer pause];
-        self.privatePlayer.currentTime = self.privatePlayer.duration * progress;
-        [self.privatePlayer play];
-    }
 }
 
 #pragma mark - Private Method
@@ -215,7 +207,7 @@
         } else {
             failBlock(voiceDownloadStatus);
         }
-        
+
     };
 }
 
@@ -238,6 +230,13 @@
 
     return output;
 }
+
+- (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension {
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:resourceName withExtension:extension];
+    return [self durationWithVaildURL:voiceURL];
+}
+
 #pragma mark - Delegate And DataSource
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {

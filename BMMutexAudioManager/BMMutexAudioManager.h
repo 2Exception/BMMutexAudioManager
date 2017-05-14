@@ -24,13 +24,14 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 
 @protocol BMMutexAudioManagerDelegate <NSObject>
 @optional
-//音频改变的时候用来更新
+
+//发生变化的时候被调用，用于更新UI
 - (void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel;
 
 //用来更新正在播放的cell的进度条
 - (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress;
 
-//一个cell播放完毕，没有启动另一个播放
+//一个cell播放完毕，进入停止状态
 - (void)mutexAudioManagerDidFinishPlaying:(NSIndexPath *)finishedCellIndexPath;
 
 @end
@@ -39,15 +40,26 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 
 @property (nonatomic, weak) id<BMMutexAudioManagerDelegate> delegate;
 
+//Singleton
 + (instancetype)sharedInstance;
 
-- (BOOL)clickPlayButtonWithAudioURL:(NSString *)URL cellIndexPath:(NSIndexPath *)indexPath;
+/**
+ * @brief 点击播放按钮时调用（必须调用）
+ * @param URL 音频文件的URL地址
+ * @param indexPath 播放按钮所在的indexPath
+ */
+- (void)clickPlayButtonWithAudioURL:(NSString *)URL cellIndexPath:(NSIndexPath *)indexPath;
 
+/**
+ * @brief 点击停止按钮时调用（按需调用）
+ * @param indexPath 播放按钮所在的indexPath
+ */
 - (void)clickStopButtonWithCellIndexPath:(NSIndexPath *)indexPath;
 
 /**
  * @brief 根据滑块所处的进度（或model中储存的进度）设置播放器播放进度
  * @param progress 滑块拖动事件发生后变化的进度
+ * @param indexPath 滑块所在的indexPath
  */
 - (void)setPlayerProgressByProgress:(float)progress cellIndexPath:(NSIndexPath *)indexPath;
 
@@ -58,8 +70,6 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
  */
 - (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath audioURL:(NSString *)audioURL;
 
-//在需要的时候设计这个方法
-- (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension;
 
 @end
 
