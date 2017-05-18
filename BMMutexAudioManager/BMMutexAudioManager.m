@@ -102,6 +102,10 @@
     return statusModel;
 }
 
+- (void)deleteAllDownloadedVoice {
+    [[BMAduioDownloadManager sharedInstance] removeVoice];
+}
+
 #pragma mark - Private Method
 
 - (NSString *)generateCellKeyStringWithIndexPath:(NSIndexPath *)indexPath {
