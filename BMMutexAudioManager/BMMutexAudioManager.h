@@ -75,6 +75,11 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
  */
 - (void)deleteAllDownloadedVoice;
 
+/**
+ * @brief 释放manager（在列表刷新、列表项发生变化、viewWillDisappear的时候调用）
+ */
+
+- (void)resetManager;
 
 @end
 
