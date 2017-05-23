@@ -8,7 +8,6 @@
 
 #import "BMAudioPlayerDemoCellTableViewCell.h"
 #import "BMMutexAudioManager.h"
-#import "CustomView.h"
 
 static NSString *kRotationAnimationKey = @"rotationAnimation";
 
@@ -16,8 +15,6 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 @property (nonatomic, strong) UIButton *controlButton;
 @property (nonatomic, strong) UISlider *voiceSlider;
-@property (nonatomic, strong) CustomView *starButton;
-@property (nonatomic, assign) BOOL flag;
 
 @end
 
@@ -72,8 +69,6 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     [self addSubview:self.controlButton];
     [self addSubview:self.voiceSlider];
     [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:self.starButton];
-    self.flag = YES;
     [self.voiceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -113,20 +108,6 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     }
 }
 
-- (void)starButtonTap {
-    if (self.flag) {
-        [self.starButton addUntitled1AnimationCompletionBlock:^(BOOL finished) {
-            NSLog(@"positive");
-        }];
-    } else {
-        [self.starButton addUntitled1AnimationReverse:YES
-                                      completionBlock:^(BOOL finished) {
-                                          NSLog(@"reserve");
-                                      }];
-    }
-    self.flag = !self.flag;
-}
-
 #pragma mark - Lazy Load
 
 - (UIButton *)controlButton {
@@ -134,15 +115,6 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
         _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 30, 50, 50)];
     }
     return _controlButton;
-}
-
-- (CustomView *)starButton {
-    if (nil == _starButton) {
-        _starButton = [[CustomView alloc] initWithFrame:CGRectMake(260, 40, 30, 30)];
-        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(starButtonTap)];
-        [_starButton addGestureRecognizer:gesture];
-    }
-    return _starButton;
 }
 
 - (UISlider *)voiceSlider {

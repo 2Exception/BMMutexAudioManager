@@ -102,8 +102,16 @@
     return statusModel;
 }
 
+- (NSIndexPath *)getCurrentPlayingIndexPath {
+    return self.currentPlayingIndexPath;
+}
+
 - (void)deleteAllDownloadedVoice {
     [[BMAduioDownloadManager sharedInstance] removeVoice];
+}
+
+- (void)releaseManager {
+    [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusStop];
 }
 
 #pragma mark - Private Method

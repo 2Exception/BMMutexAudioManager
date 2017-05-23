@@ -71,6 +71,13 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 - (BMMutexAudioStatusModel *)queryStatusModelWithIndexPath:(NSIndexPath *)indexPath audioURL:(NSString *)audioURL;
 
 /**
+ * @brief 获得正在播放的cell的indexPath
+ * @return 正在播放的cell的indexPath
+ */
+
+- (NSIndexPath *)getCurrentPlayingIndexPath;
+
+/**
  * @brief 删除缓存的音频
  */
 - (void)deleteAllDownloadedVoice;
@@ -79,7 +86,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
  * @brief 释放manager（在列表刷新、列表项发生变化、viewWillDisappear的时候调用）
  */
 
-- (void)resetManager;
+- (void)releaseManager;
 
 @end
 
