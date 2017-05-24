@@ -112,6 +112,8 @@
 
 - (void)releaseManager {
     [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusStop];
+    [self.cellStatusDictionary removeAllObjects];
+    self.previousPlayingIndexPath = nil;
 }
 
 #pragma mark - Private Method
