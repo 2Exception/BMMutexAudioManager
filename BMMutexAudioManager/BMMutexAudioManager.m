@@ -134,10 +134,27 @@
 }
 
 - (void)playAudioWithStatusModel:(BMMutexAudioStatusModel *)statusModel indexPath:(NSIndexPath *)indexPath {
-    if ([self.privatePlayer isPlaying]) {
-        [self pauseCurrentAudio];
+    if ([self isTwoIndexPathEqual:self.currentPlayingIndexPath otherIndexPath:indexPath]) {
+        if ([self.privatePlayer isPlaying]) {
+            [self pauseCurrentAudio];
+        } else {
+            [self startPlayNewAudioWithStatusModel:statusModel indexPath:indexPath];
+        }
+    } else {
+        if ([self.privatePlayer isPlaying]) {
+            [self pauseCurrentAudio];
+        }
+        [self startPlayNewAudioWithStatusModel:statusModel indexPath:indexPath];
     }
-    if (![self isTwoIndexPathEqual:self.previousPlayingIndexPath otherIndexPath:indexPath] || statusModel.currentStatus == EBMPlayerStatusStop) {
+}
+
+- (void)pauseCurrentAudio {
+    [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusPause];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+}
+
+- (void)startPlayNewAudioWithStatusModel:(BMMutexAudioStatusModel *)statusModel indexPath:(NSIndexPath *)indexPath {
+    if (statusModel.currentStatus == EBMPlayerStatusPause || statusModel.currentStatus == EBMPlayerStatusStop) {
         self.currentPlayingIndexPath = indexPath;
         self.currentPlayingModel = statusModel;
         self.privatePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:statusModel.localPathURL error:nil];
@@ -152,20 +169,15 @@
                                                      repeats:YES];
         }
         /*
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(routeChange:)
-                                                     name:AVAudioSessionRouteChangeNotification
-                                                   object:nil];*/
+         [[NSNotificationCenter defaultCenter] addObserver:self
+         selector:@selector(routeChange:)
+         name:AVAudioSessionRouteChangeNotification
+         object:nil];*/
         self.privatePlayer.currentTime = self.privatePlayer.duration * statusModel.currentProgress;
         [self.privatePlayer play];
         [self cellStatusDidChanged:self.currentPlayingIndexPath statusModel:statusModel];
         //[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
-}
-
-- (void)pauseCurrentAudio {
-    [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusPause];
-    //[[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
 }
 
 - (void)pauseOrStopAudioInIndexPath:(NSIndexPath *)indexPath status:(EBMPlayerStatus)status {
