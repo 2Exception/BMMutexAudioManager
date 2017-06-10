@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 - (void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel;
 
 //用来更新正在播放的cell的进度条
-- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress;
+- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress duration:(NSInteger)duration;
 
 //一个cell播放完毕，进入停止状态
 - (void)mutexAudioManagerDidFinishPlaying:(NSIndexPath *)finishedCellIndexPath;
@@ -95,7 +95,7 @@ typedef NS_ENUM(NSUInteger, EBMPlayerStatus) {
 @property (nonatomic, assign) EBMPlayerStatus currentStatus;
 @property (nonatomic, strong) NSURL *audioURL;
 @property (nonatomic, strong) NSURL *localPathURL;
-@property (nonatomic, assign) CGFloat duration;
+@property (nonatomic, assign) NSInteger duration;
 @property (nonatomic, assign) CGFloat currentProgress; // 0 <= currentProgress <= 1, it's a percentage
 
 @end

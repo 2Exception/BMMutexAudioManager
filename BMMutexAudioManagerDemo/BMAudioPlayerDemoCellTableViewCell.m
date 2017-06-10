@@ -15,6 +15,7 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 @property (nonatomic, strong) UIButton *controlButton;
 @property (nonatomic, strong) UISlider *voiceSlider;
+@property (nonatomic, strong) UILabel *progressLabel;
 
 @end
 
@@ -63,6 +64,14 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     self.voiceSlider.value = progress;
 }
 
+- (void)changeProgressLabelWithCurrentSecond:(NSInteger)currentSecond duration:(NSInteger)duration {
+    if (currentSecond <= 0 && duration <= 0) {
+        self.progressLabel.text = @"";
+    } else {
+        self.progressLabel.text = [NSString stringWithFormat:@"%@/%@", [self getMMSSFromSS:currentSecond], [self getMMSSFromSS:duration]];
+    }
+}
+
 #pragma mark - Init Method
 
 - (void)configUI {
@@ -70,6 +79,7 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
     [self addSubview:self.voiceSlider];
     [self.controlButton addTarget:self action:@selector(controlButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.voiceSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self addSubview:self.progressLabel];
 }
 
 #pragma mark - Private Method
@@ -89,6 +99,35 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 - (void)endAnimation:(UIView *)view {
     [view.layer removeAnimationForKey:kRotationAnimationKey];
+}
+
+- (NSString *)getMMSSFromSS:(NSInteger)seconds {
+    if (seconds >= 0) {
+        NSInteger hour = seconds / 3600;
+        NSInteger minute = (seconds % 3600) / 60;
+        NSInteger second = seconds - hour * 3600 - minute * 60;
+
+        NSMutableString *charTime;
+        if (second) {
+            if (second < 10) {
+                charTime = [NSMutableString stringWithFormat:@"0%ld", second];
+            } else {
+                charTime = [NSMutableString stringWithFormat:@"%ld", second];
+            }
+        } else {
+            charTime = [NSMutableString stringWithString:@"00"];
+        }
+        if (minute) {
+            [charTime insertString:[NSString stringWithFormat:@"%ld:", minute] atIndex:0];
+        } else {
+            [charTime insertString:@"00:" atIndex:0];
+        }
+        if (hour) {
+            [charTime insertString:[NSString stringWithFormat:@"%ld:", hour] atIndex:0];
+        }
+        return charTime;
+    }
+    return nil;
 }
 
 #pragma mark - Event Response
@@ -112,16 +151,23 @@ static NSString *kRotationAnimationKey = @"rotationAnimation";
 
 - (UIButton *)controlButton {
     if (nil == _controlButton) {
-        _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 30, 50, 50)];
+        _controlButton = [[UIButton alloc] initWithFrame:CGRectMake(15, 30, 50, 50)];
     }
     return _controlButton;
 }
 
 - (UISlider *)voiceSlider {
     if (nil == _voiceSlider) {
-        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(100, 42.5, 160, 25)];
+        _voiceSlider = [[UISlider alloc] initWithFrame:CGRectMake(80, 42.5, 160, 25)];
     }
     return _voiceSlider;
+}
+
+- (UILabel *)progressLabel {
+    if (nil == _progressLabel) {
+        _progressLabel = [[UILabel alloc] initWithFrame:CGRectMake(255, 47, 100, 15)];
+    }
+    return _progressLabel;
 }
 
 @end

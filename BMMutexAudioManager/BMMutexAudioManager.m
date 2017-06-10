@@ -7,7 +7,7 @@
 //
 
 #import "BMMutexAudioManager.h"
-#import "BMAduioDownloadManager.h"
+#import "BMAudioDownloadManager.h"
 #import <AVFoundation/AVFoundation.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -42,26 +42,29 @@
 
 - (void)clickPlayButtonWithAudioURL:(NSString *)URLString cellIndexPath:(NSIndexPath *)indexPath {
     WEAKSELF();
+    [self queryStatusModelWithIndexPath:indexPath audioURL:URLString];
     if (self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]]) {
         __block BMMutexAudioStatusModel *statusModel = self.cellStatusDictionary[[self generateCellKeyStringWithIndexPath:indexPath]];
-        if (![statusModel.localPathURL checkResourceIsReachableAndReturnError:nil]) {
+        if (!statusModel.localPathURL) {
             statusModel.currentStatus = EBMPlayerStatusDownloading;
             [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
             [self downloadAudioWithURL:URLString
             success:^(NSString *voiceName, EBMAudioDownloadStatus voiceDownloadStatus, NSString *voicePath) {
                 if (voiceDownloadStatus == EBMAudioDownloadStatusSuccess) {
-                    NSLog(@"Download success");
                     statusModel.currentStatus = EBMPlayerStatusStop;
                     statusModel.localPathURL = [NSURL fileURLWithPath:voicePath];
+                    statusModel.duration = [weakSelf durationWithVaildURL:[NSURL fileURLWithPath:voicePath]];
                     [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
                 }
             }
             fail:^(EBMAudioDownloadStatus voiceDownloadStatus) {
-                NSLog(@"Download fail");
                 statusModel.currentStatus = EBMPlayerStatusRetryDownload;
                 [weakSelf cellStatusDidChanged:indexPath statusModel:statusModel];
             }];
         } else {
+            if (statusModel.duration <= 0) {
+                statusModel.duration = [self durationWithVaildURL:statusModel.localPathURL];
+            }
             [self playAudioWithStatusModel:statusModel indexPath:indexPath];
         }
     }
@@ -87,16 +90,18 @@
         statusModel = [[BMMutexAudioStatusModel alloc] init];
         statusModel.audioURL = [NSURL URLWithString:audioURL];
         [self.cellStatusDictionary setObject:statusModel forKey:[self generateCellKeyStringWithIndexPath:indexPath]];
-        if ([[BMAduioDownloadManager sharedInstance] voiceLocalSavePathAtVoiceName:[self generateMD5WithString:audioURL]].length > 0) {
-            statusModel.localPathURL = [NSURL fileURLWithPath:[[BMAduioDownloadManager sharedInstance]
-                                                              voiceLocalSavePathAtVoiceName:[self generateMD5WithString:audioURL]]];
-        }
-        if ([statusModel.localPathURL checkResourceIsReachableAndReturnError:nil]) {
+        NSString *localPathURL = [[BMAudioDownloadManager sharedInstance]
+        voiceLocalSavePathAtVoiceName:[NSString stringWithFormat:@"%@.%@", [self generateMD5WithString:audioURL],
+                                                                 [statusModel.audioURL pathExtension]]];
+        if (localPathURL.length > 0) {
+            statusModel.localPathURL = [NSURL fileURLWithPath:localPathURL];
             statusModel.currentStatus = EBMPlayerStatusStop;
+            if (statusModel.duration <= 0) {
+                statusModel.duration = [self durationWithVaildURL:statusModel.localPathURL];
+            }
         } else {
             statusModel.currentStatus = EBMPlayerStatusUnDownload;
         }
-        statusModel.duration = [self durationWithVaildURL:statusModel.localPathURL];
         statusModel.currentProgress = 0;
     }
     return statusModel;
@@ -107,13 +112,16 @@
 }
 
 - (void)deleteAllDownloadedVoice {
-    [[BMAduioDownloadManager sharedInstance] removeVoice];
+    [[BMAudioDownloadManager sharedInstance] removeVoice];
 }
 
 - (void)releaseManager {
     [self pauseOrStopAudioInIndexPath:self.currentPlayingIndexPath status:EBMPlayerStatusStop];
     [self.cellStatusDictionary removeAllObjects];
+    self.cellStatusDictionary = nil;
     self.previousPlayingIndexPath = nil;
+    self.currentPlayingModel = nil;
+    self.currentPlayingIndexPath = nil;
 }
 
 #pragma mark - Private Method
@@ -225,8 +233,8 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setValue:URLString forKey:@"voiceUrl"];
     [dict setValue:[self generateMD5WithString:URLString] forKey:@"voiceName"];
-    [[BMAduioDownloadManager sharedInstance] asynchronousVoiceDownload:dict];
-    [BMAduioDownloadManager sharedInstance].voiceDownloadSuccessBlock =
+    [[BMAudioDownloadManager sharedInstance] asynchronousVoiceDownload:dict];
+    [BMAudioDownloadManager sharedInstance].voiceDownloadSuccessBlock =
     ^(NSString *voiceName, EBMAudioDownloadStatus voiceDownloadStatus, NSString *voicePath) {
         if (voiceDownloadStatus == EBMAudioDownloadStatusSuccess) {
             successBlock(voiceName, voiceDownloadStatus, voicePath);
@@ -257,12 +265,6 @@
     return output;
 }
 
-- (float)durationWithResourceName:(NSString *)resourceName extension:(NSString *)extension {
-    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSURL *voiceURL = [[NSBundle bundleWithPath:bundlePath] URLForResource:resourceName withExtension:extension];
-    return [self durationWithVaildURL:voiceURL];
-}
-
 #pragma mark - Delegate And DataSource
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
@@ -284,8 +286,11 @@
     //进度条显示播放进度
     float progress = [self getCurrentProgress];
     self.currentPlayingModel.currentProgress = progress;
-    if ([self.delegate respondsToSelector:@selector(mutexAudioManagerPlayingCell:progress:)]) {
-        [self.delegate mutexAudioManagerPlayingCell:self.currentPlayingIndexPath progress:progress];
+    self.currentPlayingModel.duration = self.privatePlayer.duration;
+    if ([self.delegate respondsToSelector:@selector(mutexAudioManagerPlayingCell:progress:duration:)]) {
+        [self.delegate mutexAudioManagerPlayingCell:self.currentPlayingIndexPath
+                                           progress:progress
+                                           duration:(NSInteger)self.privatePlayer.duration];
     }
 }
 

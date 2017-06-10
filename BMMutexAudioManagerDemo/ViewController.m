@@ -58,6 +58,7 @@
                                                                audioURL:[self generateAudioURLWithIndexPath:indexPath]];
     if (statusModel) {
         [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
+        [cell changeProgressLabelWithCurrentSecond:statusModel.currentProgress * statusModel.duration duration:statusModel.duration];
     } else {
         [cell changeButtonImageWithPlayerStatus:EBMPlayerStatusStop];
     }
@@ -85,10 +86,13 @@
 
 #pragma mark - Delegate And DataSource
 
-- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath progress:(CGFloat)progress {
+- (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath
+                            progress:(CGFloat)progress
+                            duration:(NSInteger)duration {
     NSLog(@"第%ld块，第%ld行，当前进度：%lf", playingCellIndexPath.section, playingCellIndexPath.row, progress);
     BMAudioPlayerDemoCellTableViewCell *cell = [self.tableView cellForRowAtIndexPath:playingCellIndexPath];
     [cell changeSliderPositionWithProgress:progress];
+    [cell changeProgressLabelWithCurrentSecond:progress * duration duration:duration];
 }
 
 - (void)mutexAudioManagerDidChanged:(NSIndexPath *)changedIndexPath statusModel:(BMMutexAudioStatusModel *)statusModel {
@@ -96,10 +100,16 @@
     if ([NSThread isMainThread]) {
         [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
         [cell changeSliderPositionWithProgress:statusModel.currentProgress];
+        if (statusModel.duration > 0 && statusModel.currentStatus == EBMPlayerStatusStop) {
+            [cell changeProgressLabelWithCurrentSecond:0 duration:statusModel.duration];
+        }
     } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [cell changeButtonImageWithPlayerStatus:statusModel.currentStatus];
             [cell changeSliderPositionWithProgress:statusModel.currentProgress];
+            if (statusModel.duration > 0 && statusModel.currentStatus == EBMPlayerStatusStop) {
+                [cell changeProgressLabelWithCurrentSecond:0 duration:statusModel.duration];
+            }
         });
     }
 }

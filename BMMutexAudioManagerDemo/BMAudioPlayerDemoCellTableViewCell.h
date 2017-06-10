@@ -19,4 +19,6 @@ typedef void (^ControlButtonClickBlock)(void);
 - (void)changeButtonImageWithPlayerStatus:(NSInteger)status;
 
 - (void)changeSliderPositionWithProgress:(CGFloat)progress;
+
+- (void)changeProgressLabelWithCurrentSecond:(NSInteger)currentSecond duration:(NSInteger)duration;
 @end
