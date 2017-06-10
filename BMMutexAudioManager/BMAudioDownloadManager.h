@@ -1,5 +1,5 @@
 //
-//  BMAduioDownloadManager.h
+//  BMAudioDownloadManager.h
 //  BMMutexAudioManager
 //
 //  Created by 李志强 on 2017/5/11.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BMAduioDownloadManager : NSObject
+@interface BMAudioDownloadManager : NSObject
 
 typedef NS_ENUM(NSUInteger, EBMAudioDownloadStatus) {
     EBMAudioDownloadStatusUnloaded = 737,

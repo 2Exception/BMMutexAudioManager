@@ -1,27 +1,27 @@
 //
-//  BMAduioDownloadManager.m
+//  BMAudioDownloadManager.m
 //  BMMutexAudioManager
 //
 //  Created by 李志强 on 2017/5/11.
 //  Copyright © 2017年 Li Zhiqiang. All rights reserved.
 //
 
-#import "BMAduioDownloadManager.h"
+#import "BMAudioDownloadManager.h"
 
 #define kVoicePath @"Voice"
 
-@interface BMAduioDownloadManager ()
+@interface BMAudioDownloadManager ()
 
 @property (nonatomic, strong) NSFileManager *fileManager;
 
 @end
 
-@implementation BMAduioDownloadManager
+@implementation BMAudioDownloadManager
 
 #pragma mark - Singleton
 
 + (instancetype)sharedInstance {
-    static BMAduioDownloadManager *_instance = nil;
+    static BMAudioDownloadManager *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];
@@ -70,7 +70,7 @@
     if (!voiceName.length || !voiceUrl.length) {
         return;
     }
-    NSString *voicePath = [NSString stringWithFormat:@"%@/%@.voice", kVoicePath, voiceName];
+    NSString *voicePath = [NSString stringWithFormat:@"%@/%@.%@", kVoicePath, voiceName,[[NSURL URLWithString:voiceUrl] pathExtension]];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = paths[0];
     NSString *voiceSavePath = [documentDirectory stringByAppendingPathComponent:voicePath];
@@ -87,7 +87,7 @@
     if (!voiceName.length) {
         return nil;
     }
-    NSString *voicePath = [NSString stringWithFormat:@"%@/%@.voice", kVoicePath, voiceName];
+    NSString *voicePath = [NSString stringWithFormat:@"%@/%@", kVoicePath, voiceName];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentDirectory = paths[0];
     NSString *voiceSavePath = [documentDirectory stringByAppendingPathComponent:voicePath];
