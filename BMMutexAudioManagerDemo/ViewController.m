@@ -84,7 +84,7 @@
     return 245;
 }
 
-#pragma mark - Delegate And DataSource
+#pragma mark - BMMutexAudioManager delegate
 
 - (void)mutexAudioManagerPlayingCell:(NSIndexPath *)playingCellIndexPath
                             progress:(CGFloat)progress
