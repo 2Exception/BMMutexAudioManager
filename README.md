@@ -56,7 +56,6 @@ In UITableViewDataSource,method  "tableView:cellForRowAtIndexPath:", you need to
     };
 
     cell.returnSliderValueBlock = ^(float value) {
-        NSLog(@"拖动值：%lf", value);
         [[BMMutexAudioManager sharedInstance] setPlayerProgressByProgress:value cellIndexPath:indexPath];
     };
     return cell;
